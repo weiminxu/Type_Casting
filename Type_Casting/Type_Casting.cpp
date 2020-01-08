@@ -18,8 +18,6 @@ public:
 		cout << "conversion operator" << endl;
 		return to_string(x);
 	}
-
-
 };
 
 
@@ -197,7 +195,6 @@ int main()
 	const int* b = &a;
 	char* c = const_cast<char*>(b); //compiler error
 
-
 	/****************************reinterpret_cast***********************************************/
 	//reinterpret_cast<new_type>(expression)
 	1)allows any pointer to be coverted into any other pointer type
@@ -212,7 +209,6 @@ int main()
 	cout << reinterpret_cast<long>(p2) << endl;
 	//cout << reinterpret_cast<int>(p2) << endl;//error:cast from pointer to smaller type 'int' loses information
 	//cout << sizeof(int*) << "  " << sizeof(int) << sizeof(long) << endl;
-
 
 	//inheretly unsafe conversions
 
@@ -290,11 +286,6 @@ int main()
 	//char* pSB = reinterpret_cast<bool*>(pSC);//error: can not initialize a variable of type 'char*' with an rvalue of type
 	bool* pSB = reinterpret_cast<bool*>(pSC);
 	cout << *pSB << endl;
-
-
-
-
-
 
 	return 0;
 }
