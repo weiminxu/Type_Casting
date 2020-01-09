@@ -1,5 +1,7 @@
 ﻿  Type_Casting.cpp
-D:\git\visual_studio_code\Type_Casting\Type_Casting\Type_Casting.cpp(24,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-D:\git\visual_studio_code\Type_Casting\Type_Casting\Type_Casting.cpp(25,11): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-D:\git\visual_studio_code\Type_Casting\Type_Casting\Type_Casting.cpp(42,7): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\git\visual_studio_code\Type_Casting\Type_Casting\Type_Casting.cpp(91,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\git\visual_studio_code\Type_Casting\Type_Casting\Type_Casting.cpp(92,11): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\git\visual_studio_code\Type_Casting\Type_Casting\Type_Casting.cpp(109,7): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\git\visual_studio_code\Type_Casting\Type_Casting\Type_Casting.cpp(182,7): warning C4101: 'b12345': unreferenced local variable
+D:\git\visual_studio_code\Type_Casting\Type_Casting\Type_Casting.cpp(198,7): warning C4101: 'b2': unreferenced local variable
   Type_Casting.vcxproj -> D:\git\visual_studio_code\Type_Casting\Type_Casting\Debug\Type_Casting.exe

@@ -1,11 +1,11 @@
 #include <iostream>
-
+#include <string>
 using namespace std;
 
 //conversion provided through conversion operator or conversion constructor
 class A
 {
-private:
+public:
 	int x;
 
 public:
@@ -16,10 +16,59 @@ public:
 	operator string()
 	{
 		cout << "conversion operator" << endl;
-		return to_string(x);
+		std::string str = std::to_string(x);
+
+		return str;
 	}
 };
 
+class A1 {};
+class B : A1 {};
+
+class person1 {};
+class student : person1 {};
+
+void eat(const person1& p) {} // anyone can eat
+void study(const student& s) {} //only students study
+
+class Base {};
+//class Base { virtual void f() {} };
+class Derived :public Base {};
+
+int fun(int*);
+
+class A2
+{
+private:
+	int x1;
+	int x2;
+public:
+	A2() :x1(10), x2(20) {}
+	void printA()
+	{
+		cout << "x1 = " << x1 << ", x2 = " << x2 << endl;
+	}
+};
+
+class B2
+{
+private:
+	char c;
+public:
+	B2() :c('A') {}
+	void printB()
+	{
+		cout << "c= " << c << endl;
+	}
+};
+
+struct S
+{
+	int i1;
+	int i2;
+	char c;
+	bool b;
+};
 
 int main()
 {
@@ -57,18 +106,21 @@ int main()
 	int i1;
 	int i2;
 
-	i1 = f;
-	i2 = static_cast<int>(f);
+	i1 = f;//same as below
+	i2 = static_cast<int>(f);//same as above
 	cout << "i1 = " << i1 << endl;
 	cout << "i2 = " << i2 << endl;
 
-	//prevent dangerous casts -- more restrictive
+	//prevent dangerous casts -- more restrictive, char can not be converted to int
+	/*
 	char c;
 	int* p1 = (int*)(&c);
 	*p1 = 3; //pass at compile time, fall at run-time
 	int* p2 = static_cast<int*>(&c); //compile-time error
+	*/
 
-	//converting to void* or from void*
+	//converting from void* to int*, but can not convert from int to void* 
+	//converting from int to in*, first convert int to void*, then from void* to int*
 	int i = 10;
 	void* v = static_cast<void*>(&i);
 	int* p = static_cast<int*>(v);
@@ -78,9 +130,9 @@ int main()
 		class A{}
 		class B:private A{}
 	*/
-	B b;
-	A* aptr1 = (A*)(&b); //allowed
-	A* aptr2 = static_cast<A*>(&b);//error: 'A' is an inaccessible base of 'B'
+	B b123;
+	A* aptr1 = (A*)(&b123); //allowed, the derived object can be converted to base class object
+	//A* aptr2 = static_cast<A*>(&b);//error: 'A' is an inaccessible base of 'B'
 
 	//private inheritance: not is-a but has-a
 	/*
@@ -90,19 +142,20 @@ int main()
 		void eat(const person& p){} // anyone can eat
 		void study(const student& s){} //only students study
 	*/
-	person p;//p is a person
-	student s; //s is a student
-	eat(p); //fine, p is a person
-	eat(s); //error, s is not a person
+	person1 pp1;//p is a person
+	student s11; //s is a student
+	eat(pp1); //fine, p is a person
+	//eat(s); //error, s is not a person
+	study(s11);
 
 	//conversions involving inheritance: is-a
 	/*
 		class A{}
 		class B:private A{}
 	*/
-	B b;
-	A* aptr = (A*)(&b); //allowed
-	A* aptr1 = static_cast<A*>(&b); //error, 'A' is an inaccessible base of 'B'
+	B b1234;
+	A* aptr = (A*)(&b1234); //allowed
+	//A* aptr1 = static_cast<A*>(&b); //error, 'A' is an inaccessible base of 'B'
 
 	/*****************************RTTI********************************************************/
 	//run time type identification
@@ -126,23 +179,27 @@ int main()
 	class Base{virtual void f(){}}
 	class Derived:public Base{}
 	*/
-	Base b;
+	Base b12345;
 	Derived d;
 	Base* ph = dynamic_cast<Base*>(&d);
-	Derived* pd = dynamic_cast<Derived*>(&b);// Quiz:will it compile?
+	//Base* ph = (Base*)(&d); // same as the above, it is ok
+	//Derived* pd = dynamic_cast<Derived*>(&b);// it is error, Base is not a polymorphic type
 
+	//dynamic_cast object is from polymorphic type, not from Base
+	/*
 	Base* pBD = new Derived;
 	Base* pBB = new Base;
 	Derived* pd;
 	pd = dynamic_cast<Derived*>(pBD);
 	pd = dynamic_cast<Derived*>(pBB);
+	*/
 
-	Derived d2;
+	Derived dd2;
 	Base b2;
 	try
 	{
-		Base& rb = dynamic_cast<Base&>(d2);
-		Derived& rd = dynamic_cast<Derived&>(b2); //exception bad_cast
+		Base& rb = dynamic_cast<Base&>(dd2);
+		//Derived& rd = dynamic_cast<Derived&>(b2); //exception bad_cast, it is bad
 	}
 	catch (exception & e)
 	{
@@ -152,7 +209,7 @@ int main()
 	/*****************************const_cast*******************************************************/
 	//const_cast<new_type>(expression)
 	//used to cast away the constness of variables
-	//passing const data to a function that does not recerive const
+	//passing const data to a function that does not receive const
 	/*
 		int fun(int* ptr)
 		{
@@ -171,7 +228,7 @@ int main()
 	private:
 		int x;
 	public:
-		void f(int) const
+		void f(int i) const
 		{
 			//this->x=i; //error
 			const_cast<A*>(this)->x = i;	
@@ -191,22 +248,22 @@ int main()
 	cout << a1 << endl;
 
 	//can not cast to a type different from original object
-	int a = 40;
-	const int* b = &a;
-	char* c = const_cast<char*>(b); //compiler error
+	const int a2 = 40;
+	const int* b212 = &a2;
+	//char* c = const_cast<char*>(b2); //compiler error, it should use reinterpret_cast<char*>(b2)
 
 	/****************************reinterpret_cast***********************************************/
 	//reinterpret_cast<new_type>(expression)
-	1)allows any pointer to be coverted into any other pointer type
-	2)allows any integral type to be converted into any pointer typeand vice versa.
-	int a1 = 70;
-	int* p1 = &a1;
-	char* pc = reinterpret_cast<char*>(p1);
-	cout << *pc << endl;
+	//1)allows any pointer to be coverted into any other pointer type
+	//2)allows any integral type to be converted into any pointer typeand vice versa.
+	int a11 = 70;
+	//int* p1 = &a11;
+	//char* pc = reinterpret_cast<char*>(p1);
+	//cout << *pc << endl;
 
-	int* p2 = reinterpret_cast<int*>(a);
-	cout << p2 << endl;
-	cout << reinterpret_cast<long>(p2) << endl;
+	int* p22 = reinterpret_cast<int*>(a11);
+	cout << p22 << endl;
+	cout << reinterpret_cast<long>(p22) << endl;
 	//cout << reinterpret_cast<int>(p2) << endl;//error:cast from pointer to smaller type 'int' loses information
 	//cout << sizeof(int*) << "  " << sizeof(int) << sizeof(long) << endl;
 
@@ -243,22 +300,24 @@ int main()
 		}
 	}
 	*/
-	A a;
-	B b;
-	A* pA = reinterpret_cast<A*>(&b);
-	B* pB = reinterpret_cast<B*>(&a);
+	A2 aa;//aa.printA();
+	B2 bb;//bb.printB();
+	A2* pA = reinterpret_cast<A2*>(&bb);
+	B2* pB = reinterpret_cast<B2*>(&aa);
 	pA->printA();
 	pB->printB();
-	A* pA1 = reinterpret_cast<A*>(pB);
-	B* pB1 = reinterpret_cast<B*>(pA);
+	A2* pA1 = reinterpret_cast<A2*>(pB);
+	B2* pB1 = reinterpret_cast<B2*>(pA);
 	pA1->printA();
 	pB1->printB();
 
 	//can not away the const, volatile, or _unaligned attributes
-	int a;
-	const int* ap = &a;
+	/*
+	const int a12 = 0;
+	const int* ap = &a12;
 	char* pc = reinterpret_cast<char*>(ap);
 	const char* pc = reinterpret_cast<const char*>(ap);
+	*/
 
 	//working with bits
 	/*
@@ -270,6 +329,7 @@ int main()
 		bool b;
 	}
 	*/
+
 	S s;
 	s.i1 = 10;
 	s.i2 = 20;
@@ -280,7 +340,7 @@ int main()
 	cout << *pS << endl;
 	pS++;
 	cout << *pS << endl;
-	char* pSC = reinterpret_cast<int*>(pS);
+	char* pSC = reinterpret_cast<char*>(pS);
 	cout << *pSC << endl;
 	pSC++;
 	//char* pSB = reinterpret_cast<bool*>(pSC);//error: can not initialize a variable of type 'char*' with an rvalue of type
@@ -288,4 +348,9 @@ int main()
 	cout << *pSB << endl;
 
 	return 0;
+}
+
+int fun(int* ptr)
+{
+	return (*ptr);
 }
