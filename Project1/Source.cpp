@@ -22,12 +22,12 @@ int main()
 	cout << *pS <<endl;
 	pS++;
 	cout << *pS << endl;
-	
+	pS++;
 	char* pSC = reinterpret_cast<char*>(pS);
-	cout << pSC << endl;
-	
+	cout << *pSC << endl;
+	pSC++;
 	bool* pSB = reinterpret_cast<bool*>(pSC);
-	cout << pSB << endl;
+	cout << *pSB << endl;
 
 	return 0;
 }

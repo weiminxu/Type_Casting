@@ -340,6 +340,7 @@ int main()
 	cout << *pS << endl;
 	pS++;
 	cout << *pS << endl;
+	pS++;
 	char* pSC = reinterpret_cast<char*>(pS);
 	cout << *pSC << endl;
 	pSC++;
